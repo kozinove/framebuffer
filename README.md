@@ -13,6 +13,8 @@
 
 OpenCV с текущей интеграцией framebuffer выложена в репозитории `https://github.com/itlab-vision/opencv_framebuffer`.  
 
+В fork добавлен ключ WITH_FRAMEBUFFER. При значенн ON включется поддержка framebuffer.
+
 Сборка пакета.
 
 ```bash
