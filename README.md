@@ -2,12 +2,12 @@
 
 ## Стркутура репозитория
 
-* build_riscv_fb.sh - скрипт сборки opencv для RISC-V
-* images - картинки использованные в примерах
-* sample_image_show - пример отображения изображений во framebuffer
-* test_fb_change - тест на возможность изменить разрешение framebuffer
-* test_fb_working_time - тест скорости работы framebuffer
-* sample_fb_opencv_highgui - тест с интеграцией framebuffer в OpenCV модуль highgui
+* `build_riscv_fb.sh` - скрипт сборки opencv для RISC-V
+* `images` - картинки использованные в примерах
+* `sample_image_show` - пример отображения изображений во framebuffer
+* `test_fb_change` - тест на возможность изменить разрешение framebuffer
+* `test_fb_working_time` - тест скорости работы framebuffer
+* `sample_fb_opencv_highgui` - тест с интеграцией framebuffer в OpenCV модуль highgui
 
 ## Сборка OpenCV c поддержкой framebuffer
 
@@ -20,8 +20,8 @@ git clone https://github.com/itlab-vision/opencv_framebuffer.git
 bash build_riscv_fb.sh
 ```
 В результате сборки образуются директории
-* opencv-build-fb-openmp - времменые файлы сборки пакета
-* opencv-install-fb-openmp - собранная библиотека
+* `opencv-build-fb-openmp` - времменые файлы сборки пакета
+* `opencv-install-fb-openmp` - собранная библиотека
 
 ## Компиляция и запуск sample_image_show
 
