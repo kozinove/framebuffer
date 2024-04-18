@@ -9,7 +9,7 @@
 * `test_fb_working_time` - тест скорости работы framebuffer
 * `sample_fb_opencv_highgui` - тест с интеграцией framebuffer в OpenCV модуль highgui
 
-## Зависимлсти 
+## Зависимости 
 
 * cmake
 * кросс-компилятор gcc для RISC-V процессоров
