@@ -126,7 +126,7 @@ Read img: [1600 x 1116]
 Read img: [2544 x 2027]
 ```
 
-* При первом обращении к imshow создается backend Framebuffer если не удалось загрузить другие в логе ниже последняя строка
+* При первом обращении к imshow создается backend Framebuffer если не удалось загрузить другие (в логе ниже последние две строки)
 
 ```bash
 [DEBUG:0@0.294] global backend.cpp:120 createDefaultUIBackend UI: Initializing backend...
