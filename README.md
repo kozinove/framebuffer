@@ -2,6 +2,7 @@
 
 ## Стркутура папока
 
+* images - картинки использованные в примерах
 * sample_image_show - пример отображения изображений во framebuffer
 * test_fb_change - тест на возможность изменить разрешение framebuffer
 * test_fb_working_time - тест скорости работы framebuffer
