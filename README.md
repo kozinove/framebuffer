@@ -20,21 +20,23 @@ make
 
 ```bash
 sipeed@lpi4a:~$ sudo ./test_fb_change starry_night.jpg
-Original resolution 1024 786
-Current resolution (test 1) 1024 786
+Original resolution 1920 1080
+Current resolution (test 1) 1024 768
 = Initial image width and heigth: 2544 2027
 
 = Image width / heigth: 1.25506
 = Image count of channels: 3
-= Resized image width and heigth: 986 786
+= Resized image width and heigth: 963 768
 
-Segmentation fault
+q<ввод>
+
+Original resolution 1920 1080 1920 1080
 ```
 Наблюдаемые эффекты: 
 * Параметры меняются и сохраняются при новом открытии буфера.
 * Реальное разрешение не меняется. При выводе картинка занимает только часть экрана.
-* После вывода изображения приложение падает.
 
+**Вывод.** Лучше менять изображение под framebuffer.
 
 ## Компиляция и запуск test_fb_working_time
 
