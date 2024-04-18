@@ -12,7 +12,7 @@
 cd test_fb_working_time
 mkdir build
 cd build
-cmake  -DCMAKE_TOOLCHAIN_FILE=../riscv64-071-gcc.toolchain.cmake ../ -DOpenCV_DIR=<opencv install prefix>/lib/cmake/opencv4
+cmake  -DCMAKE_TOOLCHAIN_FILE=../riscv64-071-gcc.toolchain.cmake ../ -DOpenCV_DIR=<opencv install prefix>/lib/cmake/opencv4 ../
 make
 ```
 
