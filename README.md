@@ -1,11 +1,12 @@
 # framebuffer
 
-## Стркутура папока
+## Стркутура репозитория
 
 * images - картинки использованные в примерах
 * sample_image_show - пример отображения изображений во framebuffer
 * test_fb_change - тест на возможность изменить разрешение framebuffer
 * test_fb_working_time - тест скорости работы framebuffer
+* sample_fb_opencv_highgui - тест с интеграцией framebuffer в OpenCV модуль highgui
 
 ## Компиляция и запуск sample_image_show
 
@@ -104,5 +105,113 @@ Time (warm-up) :11.7626
 Time (test 1) :9.84324
 Time (test 2) :11.7439
 ```
+
+## Компиляция и запуск sample_fb_opencv_highgui
+
+Компиляция:
+```bash
+cd sample_fb_opencv_highgui
+mkdir build
+cd build
+cmake  -DCMAKE_TOOLCHAIN_FILE=../riscv64-071-gcc.toolchain.cmake -DOpenCV_DIR=<opencv install prefix>/lib/cmake/opencv4 ../
+make
+```
+
+Пример запуска на LicheePI 4A
+
+* При запуске в текушей директории было найдено и прочитано два изображения 
+```bash
+sipeed@lpi4a:~$ sudo ./sample_fb_opencv_highgui
+Read img: [1600 x 1116]
+Read img: [2544 x 2027]
+```
+
+* При первом обращении к imshow создается backend Framebuffer если не удалось загрузить другие в логе ниже последняя строка
+
+```bash
+[DEBUG:0@0.294] global backend.cpp:120 createDefaultUIBackend UI: Initializing backend...
+[DEBUG:0@0.294] global registry.impl.hpp:92 UIBackendRegistry UI: Builtin backends(4): GTK(1000); GTK3(990); GTK2(980); Framebuffer(970)
+[DEBUG:0@0.294] global registry.impl.hpp:117 UIBackendRegistry UI: Available backends(4): GTK(1000); GTK3(990); GTK2(980); Framebuffer(970)
+[ INFO:0@0.294] global registry.impl.hpp:119 UIBackendRegistry UI: Enabled backends(4, sorted by priority): GTK(1000); GTK3(990); GTK2(980); Framebuffer(970)
+[DEBUG:0@0.294] global backend.cpp:78 createUIBackend UI: trying backend: GTK (priority=1000)
+[DEBUG:0@0.294] global plugin_wrapper.impl.hpp:220 getPluginCandidates UI: GTK plugin's glob is 'libopencv_highgui_gtk*.so', 1 location(s)
+[DEBUG:0@0.295] global plugin_wrapper.impl.hpp:230 getPluginCandidates     - .: 0
+[DEBUG:0@0.295] global plugin_wrapper.impl.hpp:234 getPluginCandidates Found 0 plugin(s) for GTK
+[DEBUG:0@0.295] global backend.cpp:78 createUIBackend UI: trying backend: GTK3 (priority=990)
+[DEBUG:0@0.295] global plugin_wrapper.impl.hpp:220 getPluginCandidates UI: GTK3 plugin's glob is 'libopencv_highgui_gtk3*.so', 1 location(s)
+[DEBUG:0@0.295] global plugin_wrapper.impl.hpp:230 getPluginCandidates     - .: 0
+[DEBUG:0@0.295] global plugin_wrapper.impl.hpp:234 getPluginCandidates Found 0 plugin(s) for GTK3
+[DEBUG:0@0.295] global backend.cpp:78 createUIBackend UI: trying backend: GTK2 (priority=980)
+[DEBUG:0@0.295] global plugin_wrapper.impl.hpp:220 getPluginCandidates UI: GTK2 plugin's glob is 'libopencv_highgui_gtk2*.so', 1 location(s)
+[DEBUG:0@0.295] global plugin_wrapper.impl.hpp:230 getPluginCandidates     - .: 0
+[DEBUG:0@0.295] global plugin_wrapper.impl.hpp:234 getPluginCandidates Found 0 plugin(s) for GTK2
+[DEBUG:0@0.295] global backend.cpp:78 createUIBackend UI: trying backend: Framebuffer (priority=970)
+FramebufferBackend():: event id 3
+[ INFO:0@0.295] global backend.cpp:90 createUIBackend UI: using backend: Framebuffer (priority=970)
+```
+
+* imshow создает окно, форматирует изображение и отображеет изображение на экране
+
+```bash
+FramebufferBackend::createWindow(test, 1)
+FramebufferWindow()
+FramebufferWindow():: id 4
+= Framebuffer's width, height, bits per pix:
+1920 1080 32
+
+= Framebuffer's offsets, line length:
+0 0 7680
+
+FramebufferWindow::imshow(InputArray image)
+<лог от resize>
+= Recized image width and heigth:
+1548 1080
+```
+
+* из backend вызывается ожидание нажатия клавиши. При нажании стрелок вверх и вниз переключаются изображения. По пробелу приложение завершает работу.
+
+```bash
+FramebufferBackend::waitKeyEx(int delay 0)
+ch 1 27
+                byteswaiting 0
+waitKeyEx:: code 27
+key 27 curr_img 0 ./Sunflower_from_Silesia2.jpg
+isActive()
+FramebufferWindow::imshow(InputArray image)
+InputArray image:: size[1600 x 1116]
+= Recized image width and heigth:
+1548 1080
+
+FramebufferBackend::waitKeyEx(int delay 0)
+ch 1 91
+                byteswaiting 0
+waitKeyEx:: code 91
+key 91 curr_img 0 ./Sunflower_from_Silesia2.jpg
+isActive()
+FramebufferWindow::imshow(InputArray image)
+InputArray image:: size[1600 x 1116]
+= Recized image width and heigth:
+1548 1080
+
+FramebufferBackend::waitKeyEx(int delay 0)
+ch 1 66
+                byteswaiting 0
+waitKeyEx:: code 66
+key 66 curr_img 0 ./Sunflower_from_Silesia2.jpg
+isActive()
+FramebufferWindow::imshow(InputArray image)
+InputArray image:: size[2544 x 2027]
+= Recized image width and heigth:
+1355 1080
+
+FramebufferBackend::waitKeyEx(int delay 0)
+ch 1 32
+                byteswaiting 0
+waitKeyEx:: code 32
+key 32 curr_img 1 ./starry_night.jpg
+```
+
+
+
 
 
