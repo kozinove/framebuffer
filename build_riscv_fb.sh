@@ -5,11 +5,9 @@ WORK_DIR=$PWD
 function build_version() {
   OPENCV_BUILD_DIR=$1
   OPENCV_INSTALL_DIR=$2
-  OPENCV_TOOLCHAIN_FILE=$3
 
   echo "OpenCV build directory:   $WORK_DIR/${OPENCV_BUILD_DIR}"
   echo "OpenCV install directory: $WORK_DIR/${OPENCV_INSTALL_DIR}"
-  echo "OpenCV toolchain file:    $WORK_DIR/opencv/platforms/linux/${OPENCV_TOOLCHAIN_FILE}"
 
   mkdir $OPENCV_BUILD_DIR
   mkdir $OPENCV_INSTALL_DIR
@@ -54,7 +52,6 @@ function build_version() {
 echo "======================================="
 echo "Build vector parallel version"
 echo "---------------------------------------"
-build_version opencv-build-fb-openmp opencv-install-fb-openmp \
-              riscv64-071-gcc.toolchain.cmake
+build_version opencv-build-fb-openmp opencv-install-fb-openmp 
 echo "======================================="
 
