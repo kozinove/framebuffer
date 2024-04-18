@@ -9,6 +9,11 @@
 * `test_fb_working_time` - тест скорости работы framebuffer
 * `sample_fb_opencv_highgui` - тест с интеграцией framebuffer в OpenCV модуль highgui
 
+## Зависимлсти 
+
+* cmake
+* кросс-компилятор gcc для RISC-V процессоров
+
 ## Сборка OpenCV c поддержкой framebuffer
 
 OpenCV с текущей интеграцией framebuffer выложена в репозитории `https://github.com/itlab-vision/opencv_framebuffer`.  
