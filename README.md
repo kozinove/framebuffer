@@ -146,8 +146,8 @@ Read img: [2544 x 2027]
 [DEBUG:0@0.295] global plugin_wrapper.impl.hpp:230 getPluginCandidates     - .: 0
 [DEBUG:0@0.295] global plugin_wrapper.impl.hpp:234 getPluginCandidates Found 0 plugin(s) for GTK2
 [DEBUG:0@0.295] global backend.cpp:78 createUIBackend UI: trying backend: Framebuffer (priority=970)
-FramebufferBackend():: event id 3
 [ INFO:0@0.295] global backend.cpp:90 createUIBackend UI: using backend: Framebuffer (priority=970)
+
 ```
 
 * imshow создает окно, форматирует изображение и отображеет изображение на экране
