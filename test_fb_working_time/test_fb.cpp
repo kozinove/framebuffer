@@ -92,7 +92,7 @@ void format_image(Mat &img, int fb_w, int fb_h)
 }
 
 unsigned char* map_fb(int fb_fd, fb_var_screeninfo& var_info, fb_fix_screeninfo& fix_info) {
-    long int screensize = var_info.xres * var_info.yres * var_info.bits_per_pixel / 8;
+    long int screensize = var_info.xres_virtual * var_info.yres_virtual * var_info.bits_per_pixel / 8;
     unsigned char* fbp = (unsigned char*)mmap(0, screensize, PROT_READ | PROT_WRITE, MAP_SHARED, fb_fd, 0);
     if (fbp == MAP_FAILED) {
         std::cerr << "ERROR_MAP\n";
@@ -124,7 +124,7 @@ void test_1(Mat &image, string test_name) {
     showImage(fb_p, image, var_info, fix_info);
   }
 
-  munmap(fb_p, var_info.xres * var_info.yres * var_info.bits_per_pixel / 8);
+  munmap(fb_p, var_info.xres_virtual * var_info.yres_virtual * var_info.bits_per_pixel / 8);
   close(fb_fd);
 }
 
@@ -140,7 +140,7 @@ void test_2(Mat &image, string test_name) {
 
     showImage(fb_p, image, var_info, fix_info);
 
-    munmap(fb_p, var_info.xres * var_info.yres * var_info.bits_per_pixel / 8);
+    munmap(fb_p, var_info.xres_virtual * var_info.yres_virtual * var_info.bits_per_pixel / 8);
     close(fb_fd);
   }
 }

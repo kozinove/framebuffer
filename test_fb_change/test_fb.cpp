@@ -71,7 +71,7 @@ void format_image(Mat &img, int fb_w, int fb_h)
 }
 
 unsigned char* map_fb(int fb_fd, fb_var_screeninfo& var_info, fb_fix_screeninfo& fix_info) {
-    long int screensize = var_info.xres * var_info.yres * var_info.bits_per_pixel / 8;
+    long int screensize = var_info.xres_virtual * var_info.yres_virtual * var_info.bits_per_pixel / 8;
     unsigned char* fbp = (unsigned char*)mmap(0, screensize, PROT_READ | PROT_WRITE, MAP_SHARED, fb_fd, 0);
     if (fbp == MAP_FAILED) {
         std::cerr << "ERROR_MAP\n";
@@ -103,7 +103,7 @@ void test_1(Mat &image) {
   format_image(image, var_info.xres, var_info.yres);
   showImage(fb_p, image, var_info, fix_info);
 
-  munmap(fb_p, var_info.xres * var_info.yres * var_info.bits_per_pixel / 8);
+  munmap(fb_p, var_info.xres_virtual * var_info.yres_virtual * var_info.bits_per_pixel / 8);
   close(fb_fd);
 }
 
@@ -122,11 +122,14 @@ int main(int argc, char ** argv) {
   fb_fix_screeninfo fix_info_orig;
   int fb_fd = init_fb(var_info_orig, fix_info_orig);
   
-  cout << "Original resolution " << var_info_orig.xres << " " << var_info_orig.yres << std::endl;
+  cout << "Original resolution " 
+       << var_info_orig.xres << " " 
+       << var_info_orig.yres << " "
+       << std::endl;
   
   fb_var_screeninfo var_info_new = var_info_orig;
   var_info_new.xres = 1024;
-  var_info_new.yres = 786;
+  var_info_new.yres = 768;
   
   if (ioctl(fb_fd, FBIOPUT_VSCREENINFO, &var_info_new)) {
     std::cerr << "EERROR_WRITING_VAR_INFO (resolution)\n";
@@ -135,16 +138,29 @@ int main(int argc, char ** argv) {
   close(fb_fd);
 
   test_1(image);
+  
+  getchar();
 
   fb_var_screeninfo var_info;
   fb_fix_screeninfo fix_info;
 
   fb_fd = init_fb(var_info, fix_info);
 
+  var_info_orig.xres = var_info_orig.xres_virtual;
+  var_info_orig.yres = var_info_orig.yres_virtual;
+
   if (ioctl(fb_fd, FBIOPUT_VSCREENINFO, &var_info_orig)) {
     std::cerr << "EERROR_WRITING_VAR_INFO (orig)\n";
     exit(1);
   }
+  cout << "Original resolution " 
+       << var_info_orig.xres << " " 
+       << var_info_orig.yres << " "
+       << var_info_orig.xres_virtual << " " 
+       << var_info_orig.yres_virtual << " "
+       << std::endl;
+
+
   close(fb_fd);
 
 
