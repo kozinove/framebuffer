@@ -190,36 +190,15 @@ FramebufferWindow::imshow(InputArray image)
 1548 1080
 ```
 
-* из backend вызывается ожидание нажатия клавиши. При нажатии стрелок вверх и вниз переключаются изображения. По пробелу приложение завершает работу.
+* из backend вызывается ожидание нажатия клавиши. При нажатии стрелок вверх и вниз переключаются изображения. По пробелу приложение завершает основной цикл.
 
 ```bash
 FramebufferBackend::waitKeyEx(int delay 0)
 ch 1 27
-                byteswaiting 0
-waitKeyEx:: code 27
-key 27 curr_img 0 ./Sunflower_from_Silesia2.jpg
-isActive()
-FramebufferWindow::imshow(InputArray image)
-InputArray image:: size[1600 x 1116]
-= Recized image width and heigth:
-1548 1080
-
-FramebufferBackend::waitKeyEx(int delay 0)
-ch 1 91
-                byteswaiting 0
-waitKeyEx:: code 91
-key 91 curr_img 0 ./Sunflower_from_Silesia2.jpg
-isActive()
-FramebufferWindow::imshow(InputArray image)
-InputArray image:: size[1600 x 1116]
-= Recized image width and heigth:
-1548 1080
-
-FramebufferBackend::waitKeyEx(int delay 0)
-ch 1 66
-                byteswaiting 0
+ch 2 91
+ch 2 66
 waitKeyEx:: code 66
-key 66 curr_img 0 ./Sunflower_from_Silesia2.jpg
+key 66 curr_img 1 ./starry_night.jpg
 isActive()
 FramebufferWindow::imshow(InputArray image)
 InputArray image:: size[2544 x 2027]
@@ -227,13 +206,37 @@ InputArray image:: size[2544 x 2027]
 1355 1080
 
 FramebufferBackend::waitKeyEx(int delay 0)
+ch 1 27
+ch 2 91
+ch 2 65
+waitKeyEx:: code 65
+key 65 curr_img 0 ./Sunflower_from_Silesia2.jpg
+isActive()
+FramebufferWindow::imshow(InputArray image)
+InputArray image:: size[1600 x 1116]
+= Recized image width and heigth:
+1548 1080
+
+FramebufferBackend::waitKeyEx(int delay 0)
 ch 1 32
-                byteswaiting 0
 waitKeyEx:: code 32
-key 32 curr_img 1 ./starry_night.jpg
+key 32 curr_img 0 ./Sunflower_from_Silesia2.jpg
 ```
 
+* из backend вызывается ожидание нажатия клавиши с временем ожидания 3 секунды. Если клавиша не была нажата, то возвращается -1. 
 
+```bash
+FramebufferBackend::waitKeyEx(int delay 3000)
+waitKeyEx:: code -1
+key (exit) -1
+```
 
+* иначе код клавишы
 
-
+```bash
+FramebufferBackend::waitKeyEx(int delay 3000)
+^[f_kbhit 1
+d ch 1 27
+waitKeyEx:: code 27
+key (exit) 27
+```
