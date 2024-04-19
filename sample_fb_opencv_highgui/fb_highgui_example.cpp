@@ -49,4 +49,9 @@ int main()
               << std::endl;
 
   }
+  
+  key = waitKey(3000);
+  std::cout << "key (exit) " << key 
+            << std::endl;
+  
 }
