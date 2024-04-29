@@ -8,6 +8,7 @@
 * `test_fb_change` - тест на возможность изменить разрешение framebuffer
 * `test_fb_working_time` - тест скорости работы framebuffer
 * `sample_fb_opencv_highgui` - тест с интеграцией framebuffer в OpenCV модуль highgui
+* `WaitKey_event` - тест с аналогом cv::WaitKey, основанном на dev/input/events
 
 ## Зависимости 
 
@@ -127,6 +128,62 @@ sipeed@lpi4a:~$ sudo ./test_fb_working_time starry_night.jpg
 Time (warm-up) :11.7626
 Time (test 1) :9.84324
 Time (test 2) :11.7439
+```
+
+## Компиляция и запуск WaitKey_event
+
+Компиляция:
+```bash
+cd WaitKey_event
+mkdir build
+cd build
+cmake ..
+cmake --build .
+```
+
+Описание принимаемых аргументов командной строки:
+Запуск производится с помощью команды следующего вида:
+sudo ./test_waitkey_with_event <относительный адресс изображения> <задержка WaitKey в мс>
+
+При запуске в конслоль отобразится основная информация о параметрах буффера и изображения.
+На экране отобразится изображение, которое было выбрано при запуске. Изображение исчезнет с экрана, как только пройдет время задержки в миллисекундах, которое было указано при запуске, или как только пользователь нажмет любую клавишу на клавиатуре. Если в качестве задержки был передан 0, то изображение закроется исключительно при нажатии клавиши (программа будет бесконечно ожидать нажатие любой клавиши клавиатуры). Подобное поведение функции соответствует поведению функции cv::WaitKey(). 
+
+Пример запуска, при котором пользователем не будет нажата никакая клавиша:
+```bash
+<some_user>@a-noute:~/<path_to_waitkey_test>/WaitKey_event/build$ sudo ./test_waitkey_with_event ../../images/starry_night.jpg 5000
+Image :../../images/starry_night.jpg
+= Framebuffer's width, height, bits per pix:
+1920 1080 32
+
+= Framebuffer's offsets, line length:
+0 0 7680
+
+= Initial image width and heigth: 2544 2027
+
+= Image width / heigth: 1.25506
+= Image count of channels: 3
+= Resized image width and heigth: 1355 1080
+
+No key was pressed. The waiting time is over!
+```
+
+Пример запуска, при котором пользователем будет нажата некоторая клавиша:
+```bash
+<some_user>@a-noute:~/<path_to_waitkey_test>/WaitKey_event/build$ sudo ./test_waitkey_with_event ../../images/starry_night.jpg 0
+Image :../../images/starry_night.jpg
+= Framebuffer's width, height, bits per pix:
+1920 1080 32
+
+= Framebuffer's offsets, line length:
+0 0 7680
+
+= Initial image width and heigth: 2544 2027
+
+= Image width / heigth: 1.25506
+= Image count of channels: 3
+= Resized image width and heigth: 1355 1080
+
+кThe key with the number: 19 was pressed.
 ```
 
 ## Компиляция и запуск sample_fb_opencv_highgui
