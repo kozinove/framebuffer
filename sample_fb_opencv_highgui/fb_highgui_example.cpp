@@ -13,7 +13,7 @@ int main()
   std::vector<cv::String> fn;
   std::vector<cv::Mat> imgs;
   
-  cv::glob("*.jpg", fn, false);
+  cv::glob("../photos/*.jpg", fn, false);
 
   size_t count = fn.size(); 
   for (size_t i=0; i<count; i++)
