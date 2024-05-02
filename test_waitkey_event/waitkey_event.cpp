@@ -56,7 +56,12 @@ int fb_open_and_get_info(fb_var_screeninfo& vinfo, fb_fix_screeninfo& finfo)
 int input_open()
 {
     int fd;
-    fd = open("/dev/input/event3", O_RDONLY);
+    const char* input_ev_val = getenv("KEYBOARD_INPUT_EVENT_PATH");
+    if (input_ev_val == nullptr) {
+        std::cerr << "ENV_VAR_DOES_NOT_EXIST\n";
+        return 1;
+    }
+    fd = open(input_ev_val, O_RDONLY);
     if (fd == -1) {
         std::cerr << "ERROR_OPENING_INPUT\n";
         return 1;
@@ -108,6 +113,10 @@ void showImage(unsigned char* fbp, Mat& image, fb_var_screeninfo& var_info, fb_f
 int WaitKey(int delay)
 {
     int open_fd = input_open();
+    if (open_fd == 1) {
+        std::cerr << "ERROR_INPUT_EVENT_OPEN\n";
+        return -2;
+    }
 
     fd_set fds;
     FD_ZERO(&fds);
@@ -123,6 +132,7 @@ int WaitKey(int delay)
         tv.tv_usec = delay % 1000 * 1000; // microsec
         res = select(open_fd + 1, &fds, NULL, NULL, &tv);
     } else {
+        close(open_fd);
         std::cerr << "NEGATIVE_DELAY\n";
         return -2;
     }
@@ -172,18 +182,26 @@ int WaitKey(int delay)
 
 int main(int argc, char* argv[])
 {
-    if (argc != 3) {
+    if (argc != 3 && argc != 4) {
         std::cerr << "Use for run this code: "
                   << argv[0] 
-                  << " <path_to_image> <delay>" 
+                  << " <path_to_image> <delay> [input dev path]" 
                   << std::endl;
         return 1;
     }
 
     std::string image_path = std::string(argv[1]);
     int delay = std::stoi(argv[2]);
+
+    std::string input_dev = "/dev/input/event3";
+    if (argc == 4)
+    {
+      input_dev = std::string(argv[3]);
+    }
+    setenv("KEYBOARD_INPUT_EVENT_PATH", input_dev.c_str(), 1);
     
-    std::cout << "Image :" << image_path << std::endl;
+    std::cout << "Image :" << image_path << std::endl
+              << "Input dev path: " << input_dev << std::endl;
     
     // FB OPENING
     fb_var_screeninfo var_info;
@@ -242,6 +260,7 @@ int main(int argc, char* argv[])
 
         if (key == -2) {
             std::cerr << "WAIT_KEY_ERROR\n";
+            break;
         } else if (key == -1) {
             std::cout << "No key was pressed. The waiting time is over!\n";
         } else {
