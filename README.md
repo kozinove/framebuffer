@@ -130,15 +130,15 @@ Time (test 1) :9.84324
 Time (test 2) :11.7439
 ```
 
-## Компиляция и запуск WaitKey_event
+## Компиляция и запуск test_waitkey_event
 
 Компиляция:
 ```bash
-cd WaitKey_event
+cd test_waitkey_event
 mkdir build
 cd build
-cmake ..
-cmake --build .
+cmake -D OpenCV_DIR=<opencv install prefix>/lib/cmake/opencv4 ..
+make
 ```
 
 Описание принимаемых аргументов командной строки:
@@ -146,11 +146,11 @@ cmake --build .
 sudo ./test_waitkey_with_event <относительный адресс изображения> <задержка WaitKey в мс>
 
 При запуске в конслоль отобразится основная информация о параметрах буффера и изображения.
-На экране отобразится изображение, которое было выбрано при запуске. Изображение исчезнет с экрана, как только пройдет время задержки в миллисекундах, которое было указано при запуске, или как только пользователь нажмет любую клавишу на клавиатуре. Если в качестве задержки был передан 0, то изображение закроется исключительно при нажатии клавиши (программа будет бесконечно ожидать нажатие любой клавиши клавиатуры). Подобное поведение функции соответствует поведению функции cv::WaitKey(). 
+На экране отобразится изображение, которое было выбрано при запуске. Изображение исчезнет с экрана, как только пройдет время задержки в миллисекундах, которое было указано при запуске, или как только пользователь нажмет любую клавишу на клавиатуре. Если в качестве задержки был передан 0, то изображение закроется исключительно при нажатии клавиши (программа будет бесконечно ожидать нажатие любой клавиши клавиатуры). Подобное поведение функции соответствует поведению функции cv::WaitKey(). Отрисовка изображения, вызов WaitKey(), закрытие изображения происходят в цикле, пока не будет нажата клавиша Esc.
 
-Пример запуска, при котором пользователем не будет нажата никакая клавиша:
+Пример запуска:
 ```bash
-<some_user>@a-noute:~/<path_to_waitkey_test>/WaitKey_event/build$ sudo ./test_waitkey_with_event ../../images/starry_night.jpg 5000
+<some_user>@a-noute:~/<path_to_waitkey_test>/WaitKey_event/build$ sudo ./test_waitkey_with_event ../../images/starry_night.jpg 4000
 Image :../../images/starry_night.jpg
 = Framebuffer's width, height, bits per pix:
 1920 1080 32
@@ -164,26 +164,21 @@ Image :../../images/starry_night.jpg
 = Image count of channels: 3
 = Resized image width and heigth: 1355 1080
 
+dThe key with the number: 32 was pressed.
 No key was pressed. The waiting time is over!
-```
-
-Пример запуска, при котором пользователем будет нажата некоторая клавиша:
-```bash
-<some_user>@a-noute:~/<path_to_waitkey_test>/WaitKey_event/build$ sudo ./test_waitkey_with_event ../../images/starry_night.jpg 0
-Image :../../images/starry_night.jpg
-= Framebuffer's width, height, bits per pix:
-1920 1080 32
-
-= Framebuffer's offsets, line length:
-0 0 7680
-
-= Initial image width and heigth: 2544 2027
-
-= Image width / heigth: 1.25506
-= Image count of channels: 3
-= Resized image width and heigth: 1355 1080
-
-кThe key with the number: 19 was pressed.
+No key was pressed. The waiting time is over!
+No key was pressed. The waiting time is over!
+^[[CThe key with the number: 106 was pressed.
+^[[DThe key with the number: 105 was pressed.
+^[[AThe key with the number: 103 was pressed.
+^[[BThe key with the number: 108 was pressed.
+eThe key with the number: 18 was pressed.
+jThe key with the number: 36 was pressed.
+1The key with the number: 2 was pressed.
+2The key with the number: 3 was pressed.
+3The key with the number: 4 was pressed.
+4The key with the number: 5 was pressed.
+^[The key with the number: 1 was pressed.
 ```
 
 ## Компиляция и запуск sample_fb_opencv_highgui

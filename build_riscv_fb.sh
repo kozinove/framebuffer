@@ -54,4 +54,3 @@ echo "Build opencv with framebuffer for riscv process"
 echo "---------------------------------------"
 build_version opencv-build-fb-openmp opencv-install-fb-openmp 
 echo "======================================="
-

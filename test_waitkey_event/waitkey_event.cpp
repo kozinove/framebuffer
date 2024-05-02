@@ -114,13 +114,13 @@ int WaitKey(int delay)
     FD_SET(open_fd, &fds);
 
     int res;
-    struct timeval tv;
     if (delay == 0)
     {
         res = select(open_fd + 1, &fds, NULL, NULL, NULL);
     } else if (delay > 0) {
+        struct timeval tv;
         tv.tv_sec = delay / 1000; // sec
-        tv.tv_usec = delay * 1000; // microsec
+        tv.tv_usec = delay % 1000 * 1000; // microsec
         res = select(open_fd + 1, &fds, NULL, NULL, &tv);
     } else {
         std::cerr << "NEGATIVE_DELAY\n";
@@ -139,19 +139,35 @@ int WaitKey(int delay)
         return -1;
     }
 
-    struct input_event ev[6];
-    ssize_t r = read(open_fd, &ev, sizeof(ev));
-    if (r == -1) {
-        std::cerr << "ERROR_READING_EVENTS\n";
-        close(open_fd);
-        return -1;
-    }
-    if (ev[1].type == EV_KEY && ev[1].value == 1) // key_board AND press key
-    {
-        close(open_fd);
-        return ev[1].code;
-    }
-    return -2;
+    // waiting for a KEYDOWN!
+    // struct input_event ev[6];
+    // ssize_t r = read(open_fd, &ev, sizeof(ev));
+    // if (r == -1) {
+    //     std::cerr << "ERROR_READING_EVENTS\n";
+    //     close(open_fd);
+    //     return -1;
+    // }
+    // if (ev[1].type == EV_KEY && ev[1].value == 1) // key_board action AND keydown
+    // {
+    //     close(open_fd);
+    //     return ev[1].code;
+    // }
+    // return -2;
+
+    // waiting for a KEYUP
+
+    struct input_event ev;
+    do {
+        ssize_t r = read(open_fd, &ev, sizeof(ev));
+        if (r == -1) {
+            std::cerr << "ERROR_READING_EVENTS\n";
+            close(open_fd);
+            return -1;
+        }
+    } while (ev.type != EV_KEY || ev.value != 0); // key_board action AND keyup
+    
+    close(open_fd);
+    return ev.code;
 }
 
 int main(int argc, char* argv[])
@@ -211,22 +227,27 @@ int main(int argc, char* argv[])
                     img.cols * cnt_channel);
     }
 
-    // SHOW IMAGE
-    showImage(fbp, img, var_info, fix_info);
+    int key;
+    do {
+        // SHOW IMAGE
+        showImage(fbp, img, var_info, fix_info);
 
-    // WaitKey()
-    int key = WaitKey(delay);
+        // WaitKey()
+        key = WaitKey(delay);
 
-    // RESTORE BACKGROUNG
-    showImage(fbp, tmp_buff, var_info, fix_info);
+        // RESTORE BACKGROUNG
+        //showImage(fbp, tmp_buff, var_info, fix_info); // first variant
+        // second variant (works in text format, does not work in the GUI
+        ioctl(fb_fd, FBIOPUT_VSCREENINFO, &var_info); 
 
-    if (key == -2) {
-        std::cerr << "WAIT_KEY_ERROR\n";
-    } else if (key == -1) {
-        std::cout << "No key was pressed. The waiting time is over!\n";
-    } else {
-        std::cout << "The key with the number: " << key << " was pressed.\n";
-    }
+        if (key == -2) {
+            std::cerr << "WAIT_KEY_ERROR\n";
+        } else if (key == -1) {
+            std::cout << "No key was pressed. The waiting time is over!\n";
+        } else {
+            std::cout << "The key with the number: " << key << " was pressed.\n";
+        }
+    } while (key != 1);
 
     munmap(fbp, screensize);
     close(fb_fd);
