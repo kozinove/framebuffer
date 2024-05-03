@@ -16,7 +16,7 @@
 
 ## Сборка OpenCV c поддержкой framebuffer
 
-OpenCV с текущей интеграцией framebuffer выложена в репозитории `https://github.com/itlab-vision/opencv_framebuffer`.  
+OpenCV с текущей интеграцией framebuffer выложена в репозитории `https://github.com/itlab-vision/opencv_framebuffer` (ветка `framebuffer`).  
 
 В fork добавлен ключ `WITH_FRAMEBUFFER`. При значенн ON включется поддержка framebuffer.
 
@@ -24,6 +24,7 @@ OpenCV с текущей интеграцией framebuffer выложена в 
 
 ```bash
 git clone https://github.com/itlab-vision/opencv_framebuffer.git
+git checkout framebuffer
 bash build_riscv_fb.sh
 ```
 В результате сборки образуются директории
