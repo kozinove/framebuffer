@@ -58,8 +58,7 @@ int input_open()
     int fd;
     const char* input_ev_val = getenv("KEYBOARD_INPUT_EVENT_PATH");
     if (input_ev_val == nullptr) {
-        std::cerr << "ENV_VAR_DOES_NOT_EXIST\n";
-        return 1;
+        input_ev_val = "/dev/input/event3";
     }
     fd = open(input_ev_val, O_RDONLY);
     if (fd == -1) {
@@ -129,7 +128,7 @@ int WaitKey(int delay)
     } else if (delay > 0) {
         struct timeval tv;
         tv.tv_sec = delay / 1000; // sec
-        tv.tv_usec = delay % 1000 * 1000; // microsec
+        tv.tv_usec = (delay % 1000) * 1000; // microsec
         res = select(open_fd + 1, &fds, NULL, NULL, &tv);
     } else {
         close(open_fd);
@@ -149,23 +148,7 @@ int WaitKey(int delay)
         return -1;
     }
 
-    // waiting for a KEYDOWN!
-    // struct input_event ev[6];
-    // ssize_t r = read(open_fd, &ev, sizeof(ev));
-    // if (r == -1) {
-    //     std::cerr << "ERROR_READING_EVENTS\n";
-    //     close(open_fd);
-    //     return -1;
-    // }
-    // if (ev[1].type == EV_KEY && ev[1].value == 1) // key_board action AND keydown
-    // {
-    //     close(open_fd);
-    //     return ev[1].code;
-    // }
-    // return -2;
-
     // waiting for a KEYUP
-
     struct input_event ev;
     do {
         ssize_t r = read(open_fd, &ev, sizeof(ev));
@@ -254,8 +237,7 @@ int main(int argc, char* argv[])
         key = WaitKey(delay);
 
         // RESTORE BACKGROUNG
-        //showImage(fbp, tmp_buff, var_info, fix_info); // first variant
-        // second variant (works in text format, does not work in the GUI
+        // works in text format, does not work in the GUI
         ioctl(fb_fd, FBIOPUT_VSCREENINFO, &var_info); 
 
         if (key == -2) {

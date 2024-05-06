@@ -8,7 +8,7 @@
 * `test_fb_change` - тест на возможность изменить разрешение framebuffer
 * `test_fb_working_time` - тест скорости работы framebuffer
 * `sample_fb_opencv_highgui` - тест с интеграцией framebuffer в OpenCV модуль highgui
-* `WaitKey_event` - тест с аналогом cv::WaitKey, основанном на dev/input/events
+* `test_waitkey_event` - тест с аналогом cv::WaitKey, основанном на dev/input/events
 
 ## Зависимости 
 
@@ -137,7 +137,7 @@ Time (test 2) :11.7439
 cd test_waitkey_event
 mkdir build
 cd build
-cmake -D OpenCV_DIR=<opencv install prefix>/lib/cmake/opencv4 ..
+cmake -DOpenCV_DIR=<opencv install prefix>/lib/cmake/opencv4 ..
 make
 ```
 
