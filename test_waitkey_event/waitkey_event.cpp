@@ -9,6 +9,7 @@
 #include <sys/mman.h>
 #include <sys/ioctl.h>
 #include <string>
+#include <termios.h>
 
 #include <opencv2/opencv.hpp>
 #include <opencv2/core.hpp>
@@ -109,8 +110,36 @@ void showImage(unsigned char* fbp, Mat& image, fb_var_screeninfo& var_info, fb_f
     }
 }
 
+void initTermios(int fd, struct termios* old, struct termios* current) 
+{
+    tcgetattr(fd, old);               // grab old terminal i/o settings
+    *current = *old;                    // make new settings same as old settings
+    current->c_lflag &= ~ISIG;
+    current->c_lflag &= ~ICANON;       // disable buffered i/o 
+    tcsetattr(fd, TCSANOW, current);  // use these new terminal i/o settings now
+}
+
+void resetTermios(int fd, struct termios* old) 
+{
+    tcsetattr(fd, TCSANOW, old);
+}
+
+bool kbhit(int fd, struct termios* old, struct termios* current)
+{
+    int byteswaiting=0;
+    initTermios(fd, old, current);
+    if ( ioctl(fd, FIONREAD, &byteswaiting) < 0)
+    {
+        std::cout << "BAD_IOCTL" << "\n";
+    }
+    resetTermios(fd, old);
+
+    return byteswaiting > 0;
+}
+
 int WaitKey(int delay)
 {
+    struct termios old, current;
     int open_fd = input_open();
     if (open_fd == 1) {
         std::cerr << "ERROR_INPUT_EVENT_OPEN\n";
@@ -148,16 +177,22 @@ int WaitKey(int delay)
         return -1;
     }
 
-    // waiting for a KEYUP
     struct input_event ev;
+    ssize_t r;
+    int bytes;
     do {
-        ssize_t r = read(open_fd, &ev, sizeof(ev));
+        // Считывание события
+        r = read(open_fd, &ev, sizeof(ev));
         if (r == -1) {
             std::cerr << "ERROR_READING_EVENTS\n";
             close(open_fd);
             return -1;
         }
-    } while (ev.type != EV_KEY || ev.value != 0); // key_board action AND keyup
+    } while (ev.type != EV_KEY || ev.value != 0);
+
+    // Проверка наличия данных для чтения
+    bytes = kbhit(open_fd, &old, &current);
+    std::cout << bytes << "!!!\n";
     
     close(open_fd);
     return ev.code;
@@ -231,14 +266,14 @@ int main(int argc, char* argv[])
     int key;
     do {
         // SHOW IMAGE
-        showImage(fbp, img, var_info, fix_info);
+        // showImage(fbp, img, var_info, fix_info);
 
         // WaitKey()
         key = WaitKey(delay);
 
         // RESTORE BACKGROUNG
         // works in text format, does not work in the GUI
-        ioctl(fb_fd, FBIOPUT_VSCREENINFO, &var_info); 
+        // ioctl(fb_fd, FBIOPUT_VSCREENINFO, &var_info); 
 
         if (key == -2) {
             std::cerr << "WAIT_KEY_ERROR\n";
