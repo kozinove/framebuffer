@@ -127,12 +127,12 @@ void resetTermios(int fd, struct termios* old)
 bool kbhit(int fd, struct termios* old, struct termios* current)
 {
     int byteswaiting=0;
-    initTermios(fd, old, current);
+    //initTermios(fd, old, current);
     if ( ioctl(fd, FIONREAD, &byteswaiting) < 0)
     {
         std::cout << "BAD_IOCTL" << "\n";
     }
-    resetTermios(fd, old);
+    //resetTermios(fd, old);
 
     return byteswaiting > 0;
 }
@@ -180,19 +180,24 @@ int WaitKey(int delay)
     struct input_event ev;
     ssize_t r;
     int bytes;
+    // Проверка наличия данных для чтения
+    bytes = kbhit(open_fd, &old, &current);
+    std::cout << bytes << "!!!\n";
+    std::cout << open_fd << "===============================\n";
     do {
         // Считывание события
+        // Проверка наличия данных для чтения
+        bytes = kbhit(open_fd, &old, &current);
+        std::cout << bytes << "!_!_!_\n";
         r = read(open_fd, &ev, sizeof(ev));
         if (r == -1) {
             std::cerr << "ERROR_READING_EVENTS\n";
             close(open_fd);
             return -1;
         }
+        bytes = kbhit(open_fd, &old, &current);
+        std::cout << bytes << "|-|-|-|\n";
     } while (ev.type != EV_KEY || ev.value != 0);
-
-    // Проверка наличия данных для чтения
-    bytes = kbhit(open_fd, &old, &current);
-    std::cout << bytes << "!!!\n";
     
     close(open_fd);
     return ev.code;
