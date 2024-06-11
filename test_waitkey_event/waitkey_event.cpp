@@ -272,22 +272,12 @@ int main(int argc, char* argv[])
     int key;
     do {
         // SHOW IMAGE
-<<<<<<< HEAD
-        // showImage(fbp, img, var_info, fix_info);
-=======
         showImage(fbp, img, var_info, fix_info);
->>>>>>> 93c7bdefc54f0df338047e70a8c9efd46f104250
 
-        // WaitKey()
         key = WaitKey(delay);
 
         // RESTORE BACKGROUNG
-        // works in text format, does not work in the GUI
-<<<<<<< HEAD
-        // ioctl(fb_fd, FBIOPUT_VSCREENINFO, &var_info); 
-=======
         ioctl(fb_fd, FBIOPUT_VSCREENINFO, &var_info); 
->>>>>>> 93c7bdefc54f0df338047e70a8c9efd46f104250
 
         if (key == -2) {
             std::cerr << "WAIT_KEY_ERROR\n";
