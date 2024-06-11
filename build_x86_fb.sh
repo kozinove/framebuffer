@@ -19,7 +19,6 @@ function build_version() {
   cmake \
     -G "Unix Makefiles" \
     -DCMAKE_BUILD_TYPE=Release \
-    -DCMAKE_SYSTEM_PROCESSOR=riscv64 \
     -DWITH_OPENCL=OFF \
     -DWITH_IPP=OFF \
     -DWITH_OPENMP=ON \
@@ -28,7 +27,7 @@ function build_version() {
     -DWITH_VA=OFF \
     -DWITH_VA_INTEL=OFF \
     -DBUILD_JAVA=OFF \
-    -DBUILD_TESTS=OFF \
+    -DBUILD_TESTS=ON \
     -DBUILD_EXAMPLES=OFF \
     -DBUILD_SHARED_LIBS=OFF \
     -DBUILD_ZLIB=ON \
@@ -37,10 +36,10 @@ function build_version() {
     -DWITH_FRAMEBUFFER=ON \
     -DBUILD_opencv_python2=OFF \
     -DBUILD_opencv_python3=OFF \
+    -DWITH_GTK=OFF \
     -DCMAKE_INSTALL_PREFIX=$WORK_DIR/$OPENCV_INSTALL_DIR \
-    -DCMAKE_TOOLCHAIN_FILE=$WORK_DIR/sample_image_show/riscv64-071-gcc.toolchain.cmake \
     $WORK_DIR/opencv_framebuffer
-    make -j
+    make -j4
     make install
 
   echo "---------------------------------------"
@@ -52,5 +51,6 @@ function build_version() {
 echo "======================================="
 echo "Build opencv with framebuffer for riscv process"
 echo "---------------------------------------"
-build_version opencv-build-fb-openmp opencv-install-fb-openmp 
+build_version opencv-build-fb-x86 opencv-install-fb-x86 
 echo "======================================="
+

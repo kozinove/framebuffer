@@ -8,6 +8,7 @@
 * `test_fb_change` - тест на возможность изменить разрешение framebuffer
 * `test_fb_working_time` - тест скорости работы framebuffer
 * `sample_fb_opencv_highgui` - тест с интеграцией framebuffer в OpenCV модуль highgui
+* `test_waitkey_event` - тест с аналогом cv::WaitKey, основанном на dev/input/events
 
 ## Зависимости 
 
@@ -127,6 +128,57 @@ sipeed@lpi4a:~$ sudo ./test_fb_working_time starry_night.jpg
 Time (warm-up) :11.7626
 Time (test 1) :9.84324
 Time (test 2) :11.7439
+```
+
+## Компиляция и запуск test_waitkey_event
+
+Компиляция:
+```bash
+cd test_waitkey_event
+mkdir build
+cd build
+cmake -DOpenCV_DIR=<opencv install prefix>/lib/cmake/opencv4 ..
+make
+```
+
+Описание принимаемых аргументов командной строки:
+Запуск производится с помощью команды следующего вида:
+sudo ./test_waitkey_with_event <относительный адресс изображения> <задержка WaitKey в мс> [путь к input/event девайсу]
+
+При запуске в конслоль отобразится основная информация о параметрах буффера и изображения.
+На экране отобразится изображение, которое было выбрано при запуске. Изображение исчезнет с экрана, как только пройдет время задержки в миллисекундах, которое было указано при запуске, или как только пользователь нажмет любую клавишу на клавиатуре. Если в качестве задержки был передан 0, то изображение закроется исключительно при нажатии клавиши (программа будет бесконечно ожидать нажатие любой клавиши клавиатуры). Подобное поведение функции соответствует поведению функции cv::WaitKey(). Отрисовка изображения, вызов WaitKey(), закрытие изображения происходят в цикле, пока не будет нажата клавиша Esc.
+
+Пример запуска:
+```bash
+<some_user>@a-noute:~/<path_to_waitkey_test>/WaitKey_event/build$ sudo ./test_waitkey_with_event ../../images/starry_night.jpg 4000
+Image :../../images/starry_night.jpg
+= Framebuffer's width, height, bits per pix:
+1920 1080 32
+
+= Framebuffer's offsets, line length:
+0 0 7680
+
+= Initial image width and heigth: 2544 2027
+
+= Image width / heigth: 1.25506
+= Image count of channels: 3
+= Resized image width and heigth: 1355 1080
+
+dThe key with the number: 32 was pressed.
+No key was pressed. The waiting time is over!
+No key was pressed. The waiting time is over!
+No key was pressed. The waiting time is over!
+^[[CThe key with the number: 106 was pressed.
+^[[DThe key with the number: 105 was pressed.
+^[[AThe key with the number: 103 was pressed.
+^[[BThe key with the number: 108 was pressed.
+eThe key with the number: 18 was pressed.
+jThe key with the number: 36 was pressed.
+1The key with the number: 2 was pressed.
+2The key with the number: 3 was pressed.
+3The key with the number: 4 was pressed.
+4The key with the number: 5 was pressed.
+^[The key with the number: 1 was pressed.
 ```
 
 ## Компиляция и запуск sample_fb_opencv_highgui
